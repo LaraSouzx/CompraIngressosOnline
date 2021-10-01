@@ -1,129 +1,69 @@
-<?php require('includes/header.php')?>
+<?php
+session_start();
+if (isset($_SESSION['logado'])) {
+    echo "<script>
+            location.href='home.php';
+          </script>";
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/login.js"></script>
+    <title>Login</title>
+</head>
+
 <body>
-    <div class="container">
-        <div class="row margin-top-50">
-            <div class="offset-md-3 col-md-6">
-                <div class="row">
+    <div class="container container-fluid">
+        <div class="row">
+            <div class="offset-md-2 col-md-8 box-login">
+                <h5 class="titulo">Área restrita - Faça login para continuar</h5>
 
-                    <?php if (isset($_GET['msg'])) {
-                        if ($_GET['msg'] == 'salvo') {
-                            echo "<div class='col-md-12 alert alert-success'>
-                                    Usuário cadastrado com sucesso!
-                                  </div>";
-                        }else if($_GET['msg'] == 'edit'){
-                            echo "<div class='col-md-12 alert alert-info'>Usuário editado com sucesso!</div>";
-                        } 
-                           else {
-                            echo "<div class='col-md-12 alert alert-danger'>
-                                    Erro ao salvar usuário!
-                                </div>";
-                        }
-                    } ?>
-
-                    <div class="col-md-12" id="retorno"></div>
-
-                    <form onsubmit="return false" method="POST" action="acoes/pessoas/salvar-pessoa.php" id="form-pessoa">
-
-                        <div class="col-md-12">
-                            <label class="form-label">Nome:</label>
-                            <input type="text" id="nome" name="nome" class="form-control">
-                        </div>
-
-                        <div class="col-md-12">
-                            <label class="form-label">Email:</label>
-                            <input type="email" id="email" name="email" class="form-control">
-                        </div>
-
-                        <div class="col-md-12">
-                            <label class="form-label">Sexo:</label>
-                            <select class="form-select" id="sexo" name="sexo">
-                                <option value="">Selecione...</option>
-                                <option value="M">Masculino</option>
-                                <option value="F">Feminino</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-12">
-                            <label class="form-label">Senha:</label>
-                            <input type="password" id="senha" name="senha" class="form-control">
-                        </div>
-
-                        <div class="col-md-12">
-                            <label class="form-label">Filme</label>
-                            <select class="form-select" id="filme" name="filme">
-                                <option value="">Selecione...</option>
-                                <option value="1">Matrix 4</option>
-                                <option value="2">Whoami: Nenhum sistema está a salvo</option>
-                                <option value="3">Gente Grande 2</option>
-                                <option value="4">Interstellar</option>
-                                <option value="5">Ilha do medo</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-12">
-                            <label class="form-label">Horarío</label>
-                            <select class="form-select" id="horario" name="horario">
-                                <option value="">Selecione...</option>
-                                <option value="1">14:30</option>
-                                <option value="2">17:30</option>
-                                <option value="3">18:40</option>
-                                <option value="4">20:00</option>
-                            </select>
-                        </div>
-
-                        <div class="offset-md-3 col-md-6 margin-top-20">
-                            <button onclick="validarPessoa()" class="btn btn-success col-md-12">Salvar</button>
-                        </div>
-
-                    </form>
+                <div id="retorno-login">
 
                 </div>
+
+                <?php
+                //ISSET -> SE EXISTIR
+                if (isset($_GET['msg'])) {
+                    if ($_GET['msg'] == "erro") {
+                        echo "
+                                <div class='alert alert-danger'>
+                                    Ops! Os dados informados estão 
+                                    incorretos.
+                                </div>";
+                    }
+                }
+                ?>
+
+                <form method="post" id="form-login" action="acoes/pessoas/login.php" onsubmit="return false">
+                    <div class="form-group">
+                        <label class="form-label">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Senha</label>
+                        <input type="password" name="senha" id="senha" class="form-control">
+                    </div>
+
+                    <div class="form-group btn-logar">
+                        <button onclick="validarLogin()" class="btn btn-outline-light col-sm-12 col-xs-12 offset-md-3 col-md-6">LOGAR</button>
+                    </div>
+                        <a href="cadastrar-novo.php">Cadastra-se</a>
+                </form>           
             </div>
         </div>
-
-        <div class="row margin-top-20">
-            <div class="offset-md-1 col-md-10">
-                <h3>Usuários Cadastrados</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>NOME</th>
-                            <th>EMAIL</th>
-                            <th>FILME</th>
-                            <th>HORARIO</th>
-                            <th>ACOES</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                            require('includes/conexao.php');
-                            $sql = "SELECT * FROM pessoa ORDER BY id DESC";
-                            $resultado = mysqli_query($conexao, $sql);
-                            while($row = mysqli_fetch_assoc($resultado)){
-                        ?>
-                        <tr id="pessoa-<?php echo $row['id']?>">
-                            <th><?php echo $row['id'] ?></th>
-                            <th><?php echo $row['nome'] ?></th>
-                            <th><?php echo $row['email'] ?></th>
-                            <th><?php echo $row['filme']?></th>
-                            <th><?php echo $row['horario']?></th>
-                            <th>
-                                <button class="btn btn-danger btn-sm"
-                                onclick="deletar ('<?php echo $row['id']?>')" 
-                                >Excluir</button>
-                                <a href="editar-pessoa.php?id=<?php echo $row['id']?>">
-                                <button class="btn btn-info btn-sm" 
-                                >Editar</button>
-                                </a>
-                            </th>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>        
-    </div>
+    </div>                 
 </body>
 
 </html>

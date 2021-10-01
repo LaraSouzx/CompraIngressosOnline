@@ -1,7 +1,7 @@
 <?php
 require('includes/conexao.php'); 
 $id = $_GET['id'];
-$sql = "SELECT * FROM pessoa WHERE id = $id";
+$sql = "SELECT * FROM pessoas WHERE id = $id";
 $resultado = mysqli_query($conexao, $sql);
 
 while($row = mysqli_fetch_assoc($resultado)){
