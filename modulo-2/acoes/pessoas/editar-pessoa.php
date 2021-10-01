@@ -5,7 +5,7 @@ $nome = $_POST['nome'];
 $email = $_POST['email'];
 $sexo = $_POST['sexo'];
 
-$sql = "UPDATE pessoa
+$sql = "UPDATE pessoas
 SET nome = '$nome', email ='$email', sexo = '$sexo'
  WHERE id = $id";
 
